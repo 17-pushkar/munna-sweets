@@ -1,7 +1,6 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
+import ProductGridCard from "@/components/ProductGridCard";
 import { useState } from "react";
 import { products } from "@/lib/products";
 
@@ -95,48 +94,31 @@ export default function ProductsPage() {
 </div>
         </div>
 
-        <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-         {filteredProducts.map((product) => (
-            <Link
-              key={product.slug}
-              href={`/products/${product.slug}`}
-              className="group overflow-hidden rounded-3xl bg-white shadow-md transition hover:-translate-y-1 hover:shadow-xl"
-            >
-              <div className="relative h-64">
-                <Image
-                  src={product.image}
-                  alt={product.name}
-                  fill
-                  className="object-cover transition duration-500 group-hover:scale-105"
-                />
-              </div>
-
-              <div className="p-6">
-                <div className="flex flex-wrap gap-2">
-  {product.badge && (
-    <span className="rounded-full bg-orange-100 px-3 py-1 text-sm font-semibold text-orange-600">
-      {product.badge}
-    </span>
-  )}
-
-  <span className="rounded-full bg-zinc-100 px-3 py-1 text-sm font-semibold text-zinc-600">
-    {product.category}
-  </span>
-</div>
-
-                <h2 className="mt-4 text-2xl font-bold text-zinc-900">
-                  {product.name}
-                </h2>
-
-                <p className="mt-2 text-zinc-600">{product.description}</p>
-
-                <p className="mt-4 text-xl font-bold text-orange-600">
-                  {product.price}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
+                {filteredProducts.length === 0 ? (
+          <div className="mt-14 rounded-3xl bg-white p-10 text-center shadow-md">
+            <h2 className="text-2xl font-bold text-zinc-900">
+              No products found
+            </h2>
+            <p className="mt-3 text-zinc-600">
+              Try searching with a different sweet name or category.
+            </p>
+          </div>
+        ) : (
+          <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredProducts.map((product) => (
+              <ProductGridCard
+  key={product.slug}
+  name={product.name}
+  slug={product.slug}
+  price={product.price}
+  image={product.image}
+  description={product.description}
+  category={product.category}
+  badge={product.badge}
+/>
+            ))}
+          </div>
+        )}
       </section>
     </main>
   );
