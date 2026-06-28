@@ -105,22 +105,13 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
               <span>₹{totalPrice}</span>
             </div>
 
-            <a
-              href={`https://wa.me/919999999999?text=${encodeURIComponent(
-                `Hello Munna Sweets, I want to order:\n\n${cartItems
-                  .map(
-                    (item) =>
-                      `${item.name} (${item.weight}) x ${item.quantity} = ₹${
-                        item.price * item.quantity
-                      }`
-                  )
-                  .join("\n")}\n\nTotal: ₹${totalPrice}`
-              )}`}
-              target="_blank"
-              className="mt-5 block w-full rounded-full bg-green-600 py-3 text-center font-semibold text-white transition hover:bg-green-700"
-            >
-              Checkout on WhatsApp
-            </a>
+           <a
+  href="/checkout"
+  onClick={onClose}
+  className="mt-5 block w-full rounded-full bg-green-600 py-3 text-center font-semibold text-white transition hover:bg-green-700"
+>
+  Proceed to Checkout
+</a>
           </div>
         )}
       </div>

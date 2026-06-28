@@ -1,8 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { products } from "@/lib/products";
+import { prisma } from "@/lib/prisma";
 import ProductDetailsActions from "@/components/ProductDetailsActions";
-
 
 export default async function ProductDetailsPage({
   params,
@@ -11,21 +10,42 @@ export default async function ProductDetailsPage({
 }) {
   const { slug } = await params;
 
-  const product = products.find((item) => item.slug === slug);
+  const product = await prisma.product.findUnique({
+    where: { slug },
+    include: {
+      weightOptions: true,
+    },
+  });
 
   if (!product) {
     return (
       <main className="min-h-screen px-6 py-24 text-center">
         <h1 className="text-3xl font-bold text-zinc-900">Product not found</h1>
         <Link
-          href="/"
+          href="/products"
           className="mt-6 inline-block rounded-full bg-orange-500 px-6 py-3 text-white"
         >
-          Go back home
+          Go back to products
         </Link>
       </main>
     );
   }
+
+  const relatedProducts = await prisma.product.findMany({
+    where: {
+      slug: {
+        not: slug,
+      },
+    },
+    include: {
+      weightOptions: true,
+    },
+    take: 3,
+  });
+
+  const displayPrice = `₹${
+    product.weightOptions.find((option) => option.weight === "1kg")?.price ?? 0
+  }/kg`;
 
   return (
     <main className="min-h-screen bg-orange-50 px-6 py-24">
@@ -50,7 +70,7 @@ export default async function ProductDetailsPage({
           </h1>
 
           <p className="mt-4 text-2xl font-bold text-orange-600">
-            {product.price}
+            {displayPrice}
           </p>
 
           <p className="mt-5 text-lg leading-8 text-zinc-600">
@@ -58,21 +78,21 @@ export default async function ProductDetailsPage({
           </p>
 
           <div className="mt-6">
-  <h2 className="text-lg font-semibold text-zinc-900">
-    Available Quantity
-  </h2>
+            <h2 className="text-lg font-semibold text-zinc-900">
+              Available Quantity
+            </h2>
 
-  <div className="mt-3 flex flex-wrap gap-3">
-    {["250g", "500g", "1kg", "2kg"].map((quantity) => (
-      <span
-        key={quantity}
-        className="rounded-full border border-orange-200 bg-white px-5 py-2 text-sm font-semibold text-zinc-700"
-      >
-        {quantity}
-      </span>
-    ))}
-  </div>
-</div>
+            <div className="mt-3 flex flex-wrap gap-3">
+              {product.weightOptions.map((option) => (
+                <span
+                  key={option.weight}
+                  className="rounded-full border border-orange-200 bg-white px-5 py-2 text-sm font-semibold text-zinc-700"
+                >
+                  {option.weight}
+                </span>
+              ))}
+            </div>
+          </div>
 
           <div className="mt-6">
             <h2 className="text-lg font-semibold text-zinc-900">
@@ -92,25 +112,27 @@ export default async function ProductDetailsPage({
           </div>
 
           <ProductDetailsActions
-  product={{
-    name: product.name,
-    slug: product.slug,
-    image: product.image,
-    weightOptions: product.weightOptions,
-  }}
-/>
+            product={{
+              name: product.name,
+              slug: product.slug,
+              image: product.image,
+              weightOptions: product.weightOptions,
+            }}
+          />
         </div>
-            </section>
+      </section>
 
       <section className="mx-auto mt-16 max-w-6xl">
-        <h2 className="text-3xl font-bold text-zinc-900">
-          Related Products
-        </h2>
+        <h2 className="text-3xl font-bold text-zinc-900">Related Products</h2>
 
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {products
-            .filter((item) => item.slug !== slug)
-            .map((item) => (
+          {relatedProducts.map((item) => {
+            const itemPrice = `₹${
+              item.weightOptions.find((option) => option.weight === "1kg")
+                ?.price ?? 0
+            }/kg`;
+
+            return (
               <Link
                 key={item.slug}
                 href={`/products/${item.slug}`}
@@ -130,11 +152,12 @@ export default async function ProductDetailsPage({
                     {item.name}
                   </h3>
                   <p className="mt-2 font-semibold text-orange-600">
-                    {item.price}
+                    {itemPrice}
                   </p>
                 </div>
               </Link>
-            ))}
+            );
+          })}
         </div>
       </section>
     </main>

@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Product {
+  id            String         @id @default(cuid())
+  name          String
+  slug          String         @unique
+  description   String
+  image         String
+  category      String
+  badge         String?
+  ingredients   String[]
+  featured      Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  weightOptions WeightOption[]
+  orderItems    OrderItem[]
+}
+
+model WeightOption {
+  id        String   @id @default(cuid())
+  weight    String
+  price     Float
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  address   String
+  createdAt DateTime @default(now())
+
+  orders    Order[]
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  totalAmount Float
+  status      String      @default("Pending")
+  createdAt   DateTime    @default(now())
+
+  customerId  String
+  customer    Customer    @relation(fields: [customerId], references: [id])
+
+  items       OrderItem[]
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  quantity  Int
+  weight    String
+  price     Float
+
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+}
+
+model AdminUser {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+}

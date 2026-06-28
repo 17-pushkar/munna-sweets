@@ -15,8 +15,21 @@ export default function CheckoutPage() {
     return total + item.price * item.quantity;
   }, 0);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    await fetch("/api/orders", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    name,
+    phone,
+    address,
+    totalAmount: totalPrice,
+    items: cartItems,
+  }),
+});
 
     const message = `Hello Munna Sweets, I want to place an order:
 

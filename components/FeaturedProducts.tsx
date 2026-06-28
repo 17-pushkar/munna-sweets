@@ -1,31 +1,29 @@
 import ProductCard from "./ProductCard";
 import SectionTitle from "./SectionTitle";
+import { prisma } from "@/lib/prisma";
 
-const products = [
-  {
-    name: "Gulab Jamun",
-    price: "₹320 / kg",
-    image: "/gulab-jamun.webp",
-    description: "Soft milk dumplings soaked in delicious sugar syrup.",
-    badge: "⭐ Best Seller",
-  },
-  {
-    name: "Rasgulla",
-    price: "₹300 / kg",
-    image: "/rasgulla.webp",
-    description: "Fresh cottage cheese balls prepared every day.",
-    badge: "🔥 Most Popular",
-  },
-  {
-    name: "Kaju Katli",
-    price: "₹900 / kg",
-    image: "/kaju-katli.webp",
-    description: "Premium cashew sweet made with the finest ingredients.",
-    badge: "👑 Premium",
-  },
-];
+export default async function FeaturedProducts() {
+  const products = await prisma.product.findMany({
+    where: {
+      featured: true,
+    },
+    include: {
+      weightOptions: true,
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+    take: 3,
+  });
 
-export default function FeaturedProducts() {
+  const formattedProducts = products.map((product) => ({
+  ...product,
+  badge: product.badge ?? undefined,
+  price: `₹${
+    product.weightOptions.find((option) => option.weight === "1kg")?.price ?? 0
+  }/kg`,
+}));
+
   return (
     <section id="sweets" className="bg-white py-24">
       <div className="mx-auto max-w-7xl px-6">
@@ -35,7 +33,7 @@ export default function FeaturedProducts() {
         />
 
         <div className="mt-14 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {products.map((product) => (
+          {formattedProducts.map((product) => (
             <ProductCard key={product.name} {...product} />
           ))}
         </div>
