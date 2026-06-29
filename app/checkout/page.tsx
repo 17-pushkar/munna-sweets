@@ -5,7 +5,7 @@ import OrderSummary from "@/components/OrderSummary";
 import { useCart } from "@/context/CartContext";
 
 export default function CheckoutPage() {
-  const { cartItems } = useCart();
+ const { cartItems, clearCart } = useCart();
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -45,10 +45,11 @@ ${cartItems
 Total: ₹${totalPrice}`;
 
     window.open(
-  `https://wa.me/919999999999?text=${encodeURIComponent(message)}`,
+  `https://wa.me/7897820892?text=${encodeURIComponent(message)}`,
   "_blank"
 );
 
+clearCart();
 window.location.href = "/order-success";
   };
 

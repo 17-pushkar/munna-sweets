@@ -17,6 +17,7 @@ type CartContextType = {
   increaseQuantity: (slug: string, weight: string) => void;
   decreaseQuantity: (slug: string, weight: string) => void;
   removeFromCart: (slug: string, weight: string) => void;
+  clearCart: () => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -83,6 +84,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     );
   };
 
+  const clearCart = () => {
+    setCartItems([]);
+    localStorage.removeItem("munna-sweets-cart");
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -91,6 +97,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         increaseQuantity,
         decreaseQuantity,
         removeFromCart,
+        clearCart,
       }}
     >
       {children}
