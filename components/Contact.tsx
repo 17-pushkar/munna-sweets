@@ -1,9 +1,11 @@
+"use client";
+
 import { Mail, MapPin, Phone, Clock } from "lucide-react";
 import SectionTitle from "./SectionTitle";
 
 export default function Contact() {
   return (
-    <section className="bg-orange-50 py-20">
+    <section id="contact" className="bg-orange-50 py-20">
       <div className="mx-auto max-w-7xl px-6">
         <SectionTitle
           title="Contact Us"
@@ -58,30 +60,71 @@ export default function Contact() {
 
           {/* Contact Form */}
           <div className="rounded-2xl bg-white p-8 shadow-md">
-            <form className="space-y-5">
+           <form
+  className="space-y-5"
+  onSubmit={(e) => {
+    e.preventDefault();
+
+    const form = e.currentTarget;
+
+    const name = (
+      form.elements.namedItem("name") as HTMLInputElement
+    ).value;
+
+    const email = (
+      form.elements.namedItem("email") as HTMLInputElement
+    ).value;
+
+    const phone = (
+      form.elements.namedItem("phone") as HTMLInputElement
+    ).value;
+
+    const message = (
+      form.elements.namedItem("message") as HTMLTextAreaElement
+    ).value;
+
+    const text = `Hello Munna Sweets!
+
+Name: ${name}
+Email: ${email}
+Phone: ${phone}
+
+Message:
+${message}`;
+
+    window.open(
+      `https://wa.me/92552 47406?text=${encodeURIComponent(text)}`,
+      "_blank"
+    );
+  }}
+>
               <input
-                type="text"
-                placeholder="Your Name"
-                className="w-full rounded-lg border p-3 focus:border-orange-500 focus:outline-none"
-              />
+  name="name"
+  type="text"
+  placeholder="Your Name"
+  className="w-full rounded-lg border p-3 focus:border-orange-500 focus:outline-none"
+/>
 
               <input
-                type="email"
-                placeholder="Email Address"
-                className="w-full rounded-lg border p-3 focus:border-orange-500 focus:outline-none"
-              />
+  name="email"
+  type="email"
+  placeholder="Email Address"
+  className="w-full rounded-lg border p-3 focus:border-orange-500 focus:outline-none"
+/>
 
               <input
-                type="tel"
-                placeholder="Phone Number"
-                className="w-full rounded-lg border p-3 focus:border-orange-500 focus:outline-none"
-              />
+  name="phone"
+  type="tel"
+  placeholder="Phone Number"
+  className="w-full rounded-lg border p-3 focus:border-orange-500 focus:outline-none"
+/>
 
               <textarea
-                rows={5}
-                placeholder="Your Message"
-                className="w-full rounded-lg border p-3 focus:border-orange-500 focus:outline-none"
-              />
+  name="message"
+  rows={5}
+  placeholder="Your Message"
+  className="w-full rounded-lg border p-3 focus:border-orange-500 focus:outline-none"
+/>
 
               <button
                 type="submit"

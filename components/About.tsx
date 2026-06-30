@@ -1,9 +1,10 @@
 import Image from "next/image";
+import Link from "next/link";
 import SectionTitle from "./SectionTitle";
 
 export default function About() {
   return (
-    <section className="py-20 bg-white">
+    <section id="about" className="bg-white py-20">
       <div className="mx-auto max-w-7xl px-6">
         <SectionTitle
           title="About Munna Sweets"
@@ -40,9 +41,12 @@ export default function About() {
               our sweets add happiness to every occasion.
             </p>
 
-            <button className="mt-8 rounded-lg bg-orange-600 px-6 py-3 font-semibold text-white hover:bg-orange-700 transition">
-              Learn More
-            </button>
+            <Link
+  href="/products"
+  className="mt-8 inline-block rounded-lg bg-orange-600 px-6 py-3 font-semibold text-white transition hover:bg-orange-700"
+>
+  Learn More
+</Link>
           </div>
         </div>
       </div>

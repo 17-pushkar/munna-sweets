@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowRight, BadgeCheck, Clock, Star } from "lucide-react";
 
 export default function Hero() {
@@ -25,14 +26,20 @@ export default function Hero() {
           </p>
 
           <div className="mt-10 flex flex-wrap gap-4">
-            <button className="flex items-center gap-2 rounded-xl bg-orange-600 px-7 py-4 font-semibold text-white shadow-lg transition hover:-translate-y-1 hover:bg-orange-700">
+            <Link
+              href="/products"
+              className="flex items-center gap-2 rounded-xl bg-orange-600 px-7 py-4 font-semibold text-white shadow-lg transition hover:-translate-y-1 hover:bg-orange-700"
+            >
               Explore Menu
               <ArrowRight className="h-5 w-5" />
-            </button>
+            </Link>
 
-            <button className="rounded-xl border border-orange-600 bg-white px-7 py-4 font-semibold text-orange-600 transition hover:bg-orange-50">
+            <Link
+              href="/#contact"
+              className="rounded-xl border border-orange-600 bg-white px-7 py-4 font-semibold text-orange-600 transition hover:bg-orange-50"
+            >
               Contact Us
-            </button>
+            </Link>
           </div>
 
           <div className="mt-10 grid max-w-xl gap-4 sm:grid-cols-3">
