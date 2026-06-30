@@ -37,9 +37,9 @@ export default async function AdminProductsPage({
   });
 
   return (
-    <main className="min-h-screen bg-zinc-100 px-6 py-24">
+    <main className="min-h-screen bg-zinc-100 px-4 py-20 sm:px-6 sm:py-24">
       <section className="mx-auto max-w-6xl">
-        <div className="flex flex-wrap items-end justify-between gap-6">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
   <div>
     <p className="font-semibold uppercase tracking-wide text-orange-500">
       Admin Panel
@@ -54,15 +54,15 @@ export default async function AdminProductsPage({
     </p>
   </div>
 
-  <div className="flex flex-wrap items-center gap-4">
-   <div className="flex items-center gap-3">
+  <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+   <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
   <form action="/admin/products">
     <input
       type="text"
       name="search"
       defaultValue={search ?? ""}
       placeholder="🔍 Search products..."
-      className="w-72 rounded-xl border border-orange-200 bg-white px-4 py-3 outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-200"
+      className="w-full sm:w-72 rounded-xl border border-orange-200 bg-white px-4 py-3 outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-200"
     />
   </form>
 
@@ -118,9 +118,9 @@ export default async function AdminProductsPage({
 
               return (
                 <div
-                  key={product.id}
-                  className="grid gap-4 border-b p-5 last:border-b-0 md:grid-cols-[1.5fr_1fr_1fr_1fr_1fr_1.5fr] md:items-center md:px-6"
-                >
+  key={product.id}
+  className="grid gap-5 border-b p-5 last:border-b-0 md:grid-cols-[1.5fr_1fr_1fr_1fr_1fr_1.5fr] md:items-center md:px-6"
+>
                   <div className="flex items-center gap-4">
                     <div className="relative h-16 w-16 overflow-hidden rounded-2xl bg-orange-50">
                       <Image
@@ -173,17 +173,17 @@ export default async function AdminProductsPage({
                     )}
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-3 md:justify-end">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center md:justify-end">
                     <Link
                       href={`/products/${product.slug}`}
-                      className="rounded-full bg-zinc-100 px-4 py-2 text-sm font-semibold text-zinc-700 hover:bg-zinc-200"
+                      className="w-full sm:w-auto rounded-full bg-zinc-100 px-4 py-2 text-sm font-semibold text-zinc-700 hover:bg-zinc-200"
                     >
                       View
                     </Link>
 
                     <Link
                       href={`/admin/products/${product.id}/edit`}
-                      className="rounded-full bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-600 hover:bg-blue-100"
+                      className="w-full sm:w-auto rounded-full bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-600 hover:bg-blue-100"
                     >
                       Edit
                     </Link>
