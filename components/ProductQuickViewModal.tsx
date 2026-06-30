@@ -19,6 +19,7 @@ type ProductQuickViewModalProps = {
   description: string;
   category: string;
   ingredients: string[];
+  stock: number;
   weightOptions: WeightOption[];
   onClose: () => void;
 };
@@ -30,11 +31,14 @@ export default function ProductQuickViewModal({
   description,
   category,
   ingredients,
+  stock,
   weightOptions,
   onClose,
 }: ProductQuickViewModalProps) {
-  const [selectedWeight, setSelectedWeight] = useState(weightOptions[2]);
+  const [selectedWeight, setSelectedWeight] = useState(weightOptions[0]);
   const { addToCart } = useCart();
+
+  const isOutOfStock = stock <= 0;
 
   return (
     <div
@@ -55,6 +59,14 @@ export default function ProductQuickViewModal({
         <div className="grid gap-8 md:grid-cols-2">
           <div className="relative h-72 overflow-hidden rounded-2xl md:h-96">
             <Image src={image} alt={name} fill className="object-cover" />
+
+            {isOutOfStock && (
+              <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+                <span className="rounded-full bg-white px-4 py-2 text-sm font-bold text-red-600">
+                  Out of Stock
+                </span>
+              </div>
+            )}
           </div>
 
           <div>
@@ -105,7 +117,10 @@ export default function ProductQuickViewModal({
             </div>
 
             <button
+              disabled={isOutOfStock}
               onClick={() => {
+                if (isOutOfStock) return;
+
                 addToCart({
                   name,
                   slug,
@@ -117,10 +132,14 @@ export default function ProductQuickViewModal({
 
                 toast.success(`${name} ${selectedWeight.weight} added to cart!`);
               }}
-              className="mt-8 flex items-center justify-center gap-2 rounded-full bg-orange-600 px-7 py-3 font-semibold text-white transition hover:bg-orange-700"
+              className={`mt-8 flex items-center justify-center gap-2 rounded-full px-7 py-3 font-semibold transition ${
+                isOutOfStock
+                  ? "cursor-not-allowed bg-zinc-200 text-zinc-500"
+                  : "bg-orange-600 text-white hover:bg-orange-700"
+              }`}
             >
               <ShoppingBag className="h-5 w-5" />
-              Add to Cart
+              {isOutOfStock ? "Out of Stock" : "Add to Cart"}
             </button>
           </div>
         </div>

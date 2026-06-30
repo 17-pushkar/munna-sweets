@@ -7,6 +7,7 @@ type Product = {
   name: string;
   slug: string;
   price: string;
+  stock: number;
   image: string;
   description: string;
   category: string;
@@ -117,6 +118,7 @@ export default function ProductsClient({ products }: { products: Product[] }) {
                 category={product.category}
                 ingredients={product.ingredients}
                 badge={product.badge ?? undefined}
+                stock={product.stock}
                 weightOptions={product.weightOptions}
               />
             ))}

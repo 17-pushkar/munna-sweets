@@ -21,6 +21,7 @@ type ProductGridCardProps = {
   category: string;
   ingredients: string[];
   badge?: string;
+  stock: number;
   weightOptions: WeightOption[];
 };
 
@@ -33,11 +34,14 @@ export default function ProductGridCard({
   category,
   ingredients,
   badge,
+  stock,
   weightOptions,
 }: ProductGridCardProps) {
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
-  const [selectedWeight, setSelectedWeight] = useState(weightOptions[2]);
+  const [selectedWeight, setSelectedWeight] = useState(weightOptions[0]);
   const { addToCart } = useCart();
+
+  const isOutOfStock = stock <= 0;
 
   return (
     <div className="group overflow-hidden rounded-3xl bg-white shadow-md transition hover:shadow-xl">
@@ -48,6 +52,14 @@ export default function ProductGridCard({
           fill
           className="object-cover transition duration-500 group-hover:scale-105"
         />
+
+        {isOutOfStock && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+            <span className="rounded-full bg-white px-4 py-2 text-sm font-bold text-red-600">
+              Out of Stock
+            </span>
+          </div>
+        )}
       </div>
 
       <div className="p-6">
@@ -106,7 +118,10 @@ export default function ProductGridCard({
 
           <button
             type="button"
+            disabled={isOutOfStock}
             onClick={() => {
+              if (isOutOfStock) return;
+
               addToCart({
                 name,
                 slug,
@@ -118,9 +133,13 @@ export default function ProductGridCard({
 
               toast.success(`${name} ${selectedWeight.weight} added to cart!`);
             }}
-            className="rounded-full border border-green-300 px-5 py-2 text-sm font-semibold text-green-700 transition hover:bg-green-50"
+            className={`rounded-full border px-5 py-2 text-sm font-semibold transition ${
+              isOutOfStock
+                ? "cursor-not-allowed border-zinc-300 bg-zinc-100 text-zinc-400"
+                : "border-green-300 text-green-700 hover:bg-green-50"
+            }`}
           >
-            Add to Cart
+            {isOutOfStock ? "Out of Stock" : "Add to Cart"}
           </button>
         </div>
       </div>
@@ -134,6 +153,7 @@ export default function ProductGridCard({
           description={description}
           category={category}
           ingredients={ingredients}
+          stock={stock}
           weightOptions={weightOptions}
           onClose={() => setIsQuickViewOpen(false)}
         />
